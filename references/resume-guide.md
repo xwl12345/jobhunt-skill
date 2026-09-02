@@ -87,13 +87,13 @@ PDF 内部每个页面对象带 `/Type /Page` 标记，但页树根节点是 `/T
 ```
 
 ```bash
-# Git Bash / macOS / Linux：-a 把 PDF 当文本处理；总匹配数减去 /Type /Pages 根节点数
-total=$(grep -a -o "/Type /Page"  "简历/目标.pdf" | wc -l | tr -d ' ')
-root=$(grep  -a -o "/Type /Pages" "简历/目标.pdf" | wc -l | tr -d ' ')
-echo $((total - root))   # 必须为 1
+# Git Bash / macOS / Linux（必须为 1）
+command grep -aoE "/Type /Page$|/Type /Page[^s]" "简历/目标.pdf" | wc -l
 ```
 
-- 上述命令已在 Edge 无头打印产物上实测（1 页输出 1、6 页输出 6）；遇到压缩对象流等情况仍可能输出异常（0、报错），此时直接打开 PDF 肉眼确认页数，不要死磕命令。
+- **必须写 `command grep`（或 grep 的绝对路径），不要裸写 `grep`**：部分宿主会把 grep 包装成忽略二进制文件的搜索工具（实测 ZCode 把 grep 包成 ugrep，默认 `-I` 忽略二进制），裸调用对 PDF 要么输出 0 要么输出乱值；`command` 前缀直达真正的 grep。
+- 正则里 `$` 处理页对象标记恰好在行尾的情况（Edge 产物如此），`[^s]` 排除 `/Pages` 根节点；朴素 `grep -c "/Type /Page"` 会把根节点也计进去（单页输出 2）。
+- 两个平台的写法已在 Edge 无头打印产物上实测（1 页输出 1、2 页输出 2；GNU grep 3.0 + PowerShell 双验证）；遇到压缩对象流等情况仍可能输出异常（0、报错），此时直接打开 PDF 肉眼确认页数，不要死磕命令。
 - 超过 1 页 → 回到内容层压缩；压完重新生成再校验。
 
 ## 版本记录
