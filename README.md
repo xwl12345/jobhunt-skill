@@ -102,7 +102,7 @@ cp -r /path/to/jobhunt ~/.claude/skills/jobhunt
 注意两点：
 
 - 保持文件夹结构：`SKILL.md` 必须位于 `jobhunt/` 第一层，`references/`、`assets/` 随文件夹一起发。
-- 若 skill 源码托管在你的求职工作区仓库里，**只发 skill 文件夹本身，不要把工作区仓库共享出去**——工作区里有简历、手机号等隐私。
+- skill 若托管在独立 GitHub 仓库：公开仓库让对方直接 `git clone` 或下载仓库 zip 解压即可；私有仓库则用压缩包 / 网盘发文件夹。若 skill 源码放在你的求职工作区仓库里，**只发 skill 文件夹本身，不要把工作区仓库共享出去**——工作区里有简历、手机号等隐私。
 
 ## 运行依赖
 
